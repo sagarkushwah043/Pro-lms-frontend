@@ -4,16 +4,16 @@ import HomePage from "./pages/HomePage";
 import About from "./pages/About";
 import Courses from "./pages/Courses";
 import EnrolledCourses from "./pages/EnrolledCourses";
-import EnrolledCourseDetail from "./pages/EnrolledCoursesDetails"; // dynamic enrolled course page
-import CourseDetails from "./pages/CourseDetails"; // other dynamic course page
+import EnrolledCourseDetail from "./pages/EnrolledCoursesDetails"; 
+import CourseDetails from "./pages/CourseDetails"; 
 import ProtectedRoute from "./components/ProtectedRoutes";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import NotFound from "./pages/Page-not-found";
 
 function App() {
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Single Navbar for all pages */}
       <Navbar />
 
       <div className="flex-grow">
@@ -47,7 +47,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/enrolled"
             element={
@@ -56,8 +55,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
-          {/* Dynamic enrolled course detail page */}
           <Route
             path="/enrolled/:id"
             element={
@@ -66,6 +63,9 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* 404 Page */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
 

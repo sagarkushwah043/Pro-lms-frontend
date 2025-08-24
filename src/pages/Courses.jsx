@@ -3,7 +3,7 @@ import { useTheme } from "../Context/ThemeContext";
 import { useNavigate } from "react-router-dom";
 import FilterBar from "../components/FilterBar";
 import Pagination from "../components/Pagination";
-import api from "../api/axios"; // ✅ axios instance
+import api from "../api/axios";
 
 function Courses() {
   const { darkMode } = useTheme();
@@ -94,7 +94,12 @@ function Courses() {
 
       {/* Courses Grid */}
       <div className="flex-1 overflow-y-auto px-4 py-6">
-        {loading ? <p>Loading courses...</p> : courses.length > 0 ? (
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            {/* EXACT spinner from your other page */}
+            <div className="w-14 h-14 border-4 border-t-transparent border-blue-500 rounded-full animate-spin"></div>
+          </div>
+        ) : courses.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {courses.map((course) => {
               const enrollment = getEnrollment(course.id);
@@ -123,7 +128,9 @@ function Courses() {
               );
             })}
           </div>
-        ) : <p className="text-center mt-10 text-lg">No courses found.</p>}
+        ) : (
+          <p className="text-center mt-10 text-lg">No courses found.</p>
+        )}
 
         <div className="mt-8 flex justify-center">
           <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
