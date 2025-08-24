@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import FilterBar from "../components/FilterBar";
 import Pagination from "../components/Pagination";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../Context/ThemeContext";
+import api from "../api/axios"; // ✅ use central axios instance
 
 function EnrolledCourses() {
   const { darkMode } = useTheme();
@@ -20,7 +20,7 @@ function EnrolledCourses() {
   const fetchEnrolled = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:4000/api/enrollments", {
+      const res = await api.get("/enrollments", {
         headers: { Authorization: `Bearer ${token}` },
         params: { page, limit },
       });
@@ -29,7 +29,7 @@ function EnrolledCourses() {
 
       const coursesWithDetails = await Promise.all(
         data.map(async (enroll) => {
-          const courseRes = await axios.get(`http://localhost:4000/api/courses/${enroll.courseId}`);
+          const courseRes = await api.get(`/courses/${enroll.courseId}`);
           return { ...enroll, course: courseRes.data };
         })
       );
@@ -49,7 +49,7 @@ function EnrolledCourses() {
 
   const handleUnenroll = async (enrollId) => {
     try {
-      await axios.delete(`http://localhost:4000/api/enrollments/${enrollId}`, {
+      await api.delete(`/enrollments/${enrollId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEnrolled((prev) => prev.filter((e) => e.id !== enrollId));

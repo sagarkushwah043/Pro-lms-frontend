@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
 import { useTheme } from "../Context/ThemeContext";
+import api from "../api/axios"; // ✅ use central axios instance
 
 function EnrolledCourseDetail() {
   const { id } = useParams(); 
@@ -18,7 +18,7 @@ function EnrolledCourseDetail() {
     const fetchCourse = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`http://localhost:4000/api/courses/${id}`, {
+        const res = await api.get(`/courses/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCourse(res.data);
@@ -54,8 +54,6 @@ function EnrolledCourseDetail() {
     );
   }
 
-  const handleBack = () => navigate(-1);
-
   return (
     <div
       className={`min-h-screen p-4 sm:p-6 transition-colors duration-300 ${
@@ -63,7 +61,7 @@ function EnrolledCourseDetail() {
       }`}
     >
       <button
-        onClick={handleBack}
+        onClick={() => navigate(-1)}
         className={`mb-6 px-4 py-2 rounded-lg font-medium transition ${
           darkMode
             ? "bg-gray-700 hover:bg-gray-600 text-gray-200"

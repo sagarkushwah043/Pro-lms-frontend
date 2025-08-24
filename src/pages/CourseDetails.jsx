@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useTheme } from "../Context/ThemeContext";
+import api from "../api/axios"; // ✅ use central axios instance
 
 function CourseDetails() {
   const { id } = useParams();
@@ -18,11 +18,13 @@ function CourseDetails() {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const res = await axios.get(`http://localhost:4000/api/courses/${id}`);
+        // Fetch course from deployed backend
+        const res = await api.get(`/courses/${id}`);
         setCourse(res.data);
 
         if (token) {
-          const enrollRes = await axios.get("http://localhost:4000/api/enrollments", {
+          // Fetch enrollments
+          const enrollRes = await api.get("/enrollments", {
             headers: { Authorization: `Bearer ${token}` },
           });
 
@@ -46,9 +48,14 @@ function CourseDetails() {
 
   // Enroll course
   const handleEnroll = async () => {
+    if (!token) {
+      alert("Please login to enroll");
+      navigate("/");
+      return;
+    }
     try {
-      const res = await axios.post(
-        "http://localhost:4000/api/enrollments",
+      const res = await api.post(
+        "/enrollments",
         { courseId: id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -63,7 +70,7 @@ function CourseDetails() {
   const handleUnenroll = async () => {
     if (!enrollmentId) return;
     try {
-      await axios.delete(`http://localhost:4000/api/enrollments/${enrollmentId}`, {
+      await api.delete(`/enrollments/${enrollmentId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEnrolled(false);
@@ -131,12 +138,20 @@ function CourseDetails() {
         {/* Course Content */}
         <div className="flex flex-col flex-1 gap-4">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">{course.title}</h1>
-          <p className={darkMode ? "text-gray-300 leading-relaxed" : "text-gray-700 leading-relaxed"}>
+          <p
+            className={
+              darkMode ? "text-gray-300 leading-relaxed" : "text-gray-700 leading-relaxed"
+            }
+          >
             {course.description}
           </p>
 
           {/* Meta Info */}
-          <div className={`flex flex-col sm:flex-row gap-4 sm:gap-6 text-sm sm:text-base ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+          <div
+            className={`flex flex-col sm:flex-row gap-4 sm:gap-6 text-sm sm:text-base ${
+              darkMode ? "text-gray-400" : "text-gray-600"
+            }`}
+          >
             <span>📘 Level: {course.level}</span>
             <span>📂 Category: {course.category}</span>
           </div>
