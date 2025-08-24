@@ -7,9 +7,6 @@ A fast, modern Learning Management System (LMS) frontend built with **Vite + Rea
 [![Tailwind](https://img.shields.io/badge/TailwindCSS-3.x-38B2AC)]()
 
 ## 🚀 Live Demo
-**Demo:** https://your-demo-url-here.com  
-> Replace the URL above with your deployed site (Vercel/Netlify/GitHub Pages, etc.).
-
 ---
 
 ## 📦 Tech Stack
