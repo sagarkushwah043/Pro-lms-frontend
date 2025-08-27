@@ -68,7 +68,10 @@ const FilterBar = ({ filters, onFilterChange }) => {
         <option value="">All Categories</option>
         <option value="programming">Programming</option>
         <option value="design">Design</option>
-        <option value="marketing">Marketing</option>
+        <option value="data science">Data Science</option>
+        <option value="database">Database</option>
+        <option value="devops">Dev ops</option>
+        <option value="web development">Web Development</option>
       </select>
 
       {/* Apply Button */}
