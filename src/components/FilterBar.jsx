@@ -22,19 +22,17 @@ const FilterBar = ({ filters, onFilterChange }) => {
   return (
     <form
       onSubmit={handleSearch}
-      className={`flex flex-col sm:flex-row items-center gap-2 sm:gap-4 p-3 sm:p-4 rounded-2xl shadow-lg border transition-transform transform hover:-translate-y-1 duration-300 ${
-        darkMode
-          ? "bg-gradient-to-r from-gray-800 to-gray-900 border-gray-700"
-          : "bg-gradient-to-r from-teal-50 to-blue-50 border-gray-200"
+      className={`flex flex-col sm:flex-row gap-2 p-3 border rounded-md ${
+        darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-300"
       }`}
     >
       {/* Search */}
       <input
         type="text"
-        placeholder="Search courses..."
+        placeholder="Search..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className={`px-3 py-2 sm:py-1 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 w-full sm:w-1/3 transition ${
+        className={`px-2 py-1 rounded border text-sm w-full sm:w-1/3 ${
           darkMode
             ? "bg-gray-700 text-gray-200 border-gray-600"
             : "bg-white text-gray-900 border-gray-300"
@@ -45,7 +43,7 @@ const FilterBar = ({ filters, onFilterChange }) => {
       <select
         value={level}
         onChange={(e) => setLevel(e.target.value)}
-        className={`px-3 py-2 sm:py-1 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 transition ${
+        className={`px-2 py-1 rounded border text-sm ${
           darkMode
             ? "bg-gray-700 text-gray-200 border-gray-600"
             : "bg-white text-gray-900 border-gray-300"
@@ -61,7 +59,7 @@ const FilterBar = ({ filters, onFilterChange }) => {
       <select
         value={category}
         onChange={(e) => setCategory(e.target.value)}
-        className={`px-3 py-2 sm:py-1 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 transition ${
+        className={`px-2 py-1 rounded border text-sm ${
           darkMode
             ? "bg-gray-700 text-gray-200 border-gray-600"
             : "bg-white text-gray-900 border-gray-300"
@@ -76,10 +74,10 @@ const FilterBar = ({ filters, onFilterChange }) => {
       {/* Apply Button */}
       <button
         type="submit"
-        className={`px-5 py-2 sm:py-1 rounded-full shadow-md hover:shadow-xl hover:scale-105 transition transform duration-300 w-full sm:w-auto text-sm font-medium ${
+        className={`px-4 py-1 rounded text-sm font-medium ${
           darkMode
-            ? "bg-gradient-to-r from-teal-700 to-blue-800 text-white"
-            : "bg-gradient-to-r from-teal-500 to-blue-600 text-white"
+            ? "bg-teal-700 text-white"
+            : "bg-teal-500 text-white"
         }`}
       >
         Apply

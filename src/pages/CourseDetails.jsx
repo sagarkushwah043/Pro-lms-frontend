@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTheme } from "../Context/ThemeContext";
-import api from "../api/axios"; // ✅ use central axios instance
+import api from "../api/axios";
 
 function CourseDetails() {
   const { id } = useParams();
@@ -14,16 +14,13 @@ function CourseDetails() {
   const [enrolled, setEnrolled] = useState(false);
   const [enrollmentId, setEnrollmentId] = useState(null);
 
-  // Fetch course & enrollment status
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        // Fetch course from deployed backend
         const res = await api.get(`/courses/${id}`);
         setCourse(res.data);
 
         if (token) {
-          // Fetch enrollments
           const enrollRes = await api.get("/enrollments", {
             headers: { Authorization: `Bearer ${token}` },
           });
@@ -46,7 +43,6 @@ function CourseDetails() {
     fetchCourse();
   }, [id, token]);
 
-  // Enroll course
   const handleEnroll = async () => {
     if (!token) {
       alert("Please login to enroll");
@@ -66,7 +62,6 @@ function CourseDetails() {
     }
   };
 
-  // Unenroll course
   const handleUnenroll = async () => {
     if (!enrollmentId) return;
     try {
@@ -83,11 +78,11 @@ function CourseDetails() {
   if (loading) {
     return (
       <div
-        className={`min-h-screen flex items-center justify-center transition-colors duration-300 ${
-          darkMode ? "bg-gray-900 text-gray-200" : "bg-gray-100 text-gray-900"
+        className={`min-h-screen flex items-center justify-center ${
+          darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
         }`}
       >
-        <div className="w-12 h-12 border-4 border-t-4 border-gradient-to-r from-teal-500 to-blue-600 rounded-full animate-spin"></div>
+        <p>Loading...</p>
       </div>
     );
   }
@@ -95,85 +90,68 @@ function CourseDetails() {
   if (!course) {
     return (
       <div
-        className={`min-h-screen flex items-center justify-center transition-colors duration-300 ${
-          darkMode ? "bg-gray-900 text-gray-200" : "bg-gray-100 text-gray-900"
+        className={`min-h-screen flex items-center justify-center ${
+          darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
         }`}
       >
-        <p className="text-red-500 text-lg">Course not found.</p>
+        <p className="text-red-500">Course not found.</p>
       </div>
     );
   }
 
   return (
     <div
-      className={`min-h-screen p-4 sm:p-6 transition-colors duration-300 ${
-        darkMode ? "bg-gray-900 text-gray-200" : "bg-gray-100 text-gray-900"
+      className={`min-h-screen p-4 ${
+        darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
       }`}
     >
       {/* Back Button */}
       <button
         onClick={() => navigate(-1)}
-        className={`mb-6 px-4 py-2 rounded-lg font-medium transition ${
-          darkMode
-            ? "bg-gray-700 hover:bg-gray-600 text-gray-200"
-            : "bg-gray-300 hover:bg-gray-400 text-gray-900"
-        }`}
+        className="mb-4 px-3 py-1 border rounded"
       >
         ← Back
       </button>
 
       {/* Course Container */}
       <div
-        className={`max-w-4xl mx-auto rounded-3xl shadow-xl flex flex-col md:flex-row gap-6 p-6 md:p-8 transition-colors duration-300 ${
+        className={`max-w-3xl mx-auto border rounded p-4 ${
           darkMode ? "bg-gray-800" : "bg-white"
         }`}
       >
-        {/* Course Image */}
+        {/* Image */}
         <img
           src={course.image || "https://via.placeholder.com/800x400"}
           alt={course.title}
-          className="rounded-xl w-full md:w-1/2 h-64 md:h-auto object-cover"
+          className="w-full h-60 object-cover rounded"
         />
 
-        {/* Course Content */}
-        <div className="flex flex-col flex-1 gap-4">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">{course.title}</h1>
-          <p
-            className={
-              darkMode ? "text-gray-300 leading-relaxed" : "text-gray-700 leading-relaxed"
-            }
-          >
-            {course.description}
-          </p>
+        {/* Content */}
+        <h1 className="text-2xl font-semibold mt-4">{course.title}</h1>
+        <p className="mt-2">{course.description}</p>
 
-          {/* Meta Info */}
-          <div
-            className={`flex flex-col sm:flex-row gap-4 sm:gap-6 text-sm sm:text-base ${
-              darkMode ? "text-gray-400" : "text-gray-600"
-            }`}
-          >
-            <span>📘 Level: {course.level}</span>
-            <span>📂 Category: {course.category}</span>
-          </div>
+        <div className="mt-2 text-sm">
+          <span>📘 Level: {course.level}</span> |{" "}
+          <span>📂 Category: {course.category}</span>
+        </div>
 
-          {/* Enroll / Unenroll Button */}
-          <div className="mt-4">
-            {enrolled ? (
-              <button
-                onClick={handleUnenroll}
-                className="w-full md:w-48 bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-xl shadow-md transition"
-              >
-                ❌ Unenroll
-              </button>
-            ) : (
-              <button
-                onClick={handleEnroll}
-                className="w-full md:w-48 bg-gradient-to-r from-teal-500 to-blue-600 hover:opacity-90 text-white font-semibold px-6 py-3 rounded-xl shadow-md transition"
-              >
-                🚀 Enroll Now
-              </button>
-            )}
-          </div>
+        {/* Buttons */}
+        <div className="mt-4">
+          {enrolled ? (
+            <button
+              onClick={handleUnenroll}
+              className="px-4 py-2 bg-red-500 text-white rounded"
+            >
+              Unenroll
+            </button>
+          ) : (
+            <button
+              onClick={handleEnroll}
+              className="px-4 py-2 bg-blue-600 text-white rounded"
+            >
+              Enroll Now
+            </button>
+          )}
         </div>
       </div>
     </div>

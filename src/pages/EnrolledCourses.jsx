@@ -3,7 +3,7 @@ import FilterBar from "../components/FilterBar";
 import Pagination from "../components/Pagination";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../Context/ThemeContext";
-import api from "../api/axios"; // ✅ use central axios instance
+import api from "../api/axios";
 
 function EnrolledCourses() {
   const { darkMode } = useTheme();
@@ -70,73 +70,65 @@ function EnrolledCourses() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
-        <div className="w-12 h-12 border-4 border-dashed border-blue-500 dark:border-teal-400 rounded-full animate-spin"></div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-blue-500 rounded-full animate-spin"></div>
       </div>
     );
   }
 
   return (
-    <div className={`min-h-screen p-6 ${darkMode ? "bg-gray-900 text-gray-200" : "bg-gray-100 text-gray-900"}`}>
-      <h1 className="text-3xl font-bold mb-6 text-center">🎓 My Enrolled Courses</h1>
+    <div className={`min-h-screen p-4 ${darkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-black"}`}>
+      <h1 className="text-2xl font-semibold text-center mb-4">My Enrolled Courses</h1>
 
       <FilterBar filters={filters} onFilterChange={setFilters} />
 
       {filtered.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
           {filtered.map((e) => (
             <div
               key={e.id}
-              className={`rounded-2xl shadow-lg p-6 flex flex-col transition-transform duration-300 hover:scale-[1.02] ${
-                darkMode ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"
-              }`}
+              className={`p-4 border rounded-lg ${darkMode ? "border-gray-700 bg-gray-800" : "border-gray-300 bg-white"}`}
             >
               <img
                 src={e.course?.image || "https://via.placeholder.com/400x200"}
                 alt={e.course?.title}
-                className="rounded-lg w-full h-40 object-cover mb-4"
+                className="rounded-md w-full h-36 object-cover mb-3"
               />
-              <h2 className="text-xl font-semibold mb-2">{e.course?.title}</h2>
-              <p className={`flex-grow mb-4 line-clamp-3 text-sm ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
-                {e.course?.description}
-              </p>
+              <h2 className="text-lg font-medium mb-2">{e.course?.title}</h2>
+              <p className="text-sm mb-3 line-clamp-3">{e.course?.description}</p>
 
-              <div className={`flex justify-between text-sm mb-4 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
-                <span>📘 Level: {e.course?.level}</span>
-                <span>📂 {e.course?.category}</span>
+              <div className="flex justify-between text-xs mb-2">
+                <span>Level: {e.course?.level}</span>
+                <span>{e.course?.category}</span>
               </div>
 
-              <p className="text-xs text-gray-400 mb-3">
-                Enrolled on: {new Date(e.createdAt).toLocaleDateString()}
+              <p className="text-xs mb-3 text-gray-500">
+                Enrolled: {new Date(e.createdAt).toLocaleDateString()}
               </p>
 
-              <div className="flex gap-3 mt-auto">
+              <div className="flex gap-2">
                 <button
-                  onClick={() =>
-                    navigate(`/enrolled/${e.courseId}`, { state: { enrolledAt: e.createdAt } })
-                  }
-                  className="flex-1 bg-blue-500 text-white font-semibold px-6 py-2 rounded-xl hover:bg-blue-600 transition"
+                  onClick={() => navigate(`/enrolled/${e.courseId}`, { state: { enrolledAt: e.createdAt } })}
+                  className="flex-1 bg-blue-500 text-white text-sm py-1 rounded"
                 >
-                  👁 View
+                  View
                 </button>
 
                 <button
                   onClick={() => handleUnenroll(e.id)}
-                  className="flex-1 bg-red-500 text-white font-semibold px-6 py-2 rounded-xl hover:bg-red-600 transition"
+                  className="flex-1 bg-red-500 text-white text-sm py-1 rounded"
                 >
-                  ❌ Unenroll
+                  Unenroll
                 </button>
               </div>
             </div>
           ))}
         </div>
       ) : (
-        <p className={`text-center text-lg mt-10 ${darkMode ? "text-gray-300" : "text-gray-500"}`}>
-          No enrolled courses found.
-        </p>
+        <p className="text-center text-sm mt-10">No enrolled courses found.</p>
       )}
 
-      <div className="mt-8 flex justify-center">
+      <div className="mt-6 flex justify-center">
         <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
       </div>
     </div>
