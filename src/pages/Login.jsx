@@ -7,47 +7,60 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = () => {
     setError("");
+    setLoading(true);
 
-    if (!username || !password) {
-      setError("Please enter both username and password ❌");
-      return;
-    }
+    setTimeout(() => {
+      if (!username || !password) {
+        setError("Please enter both username and password ❌");
+        setLoading(false);
+        return;
+      }
 
-    if (username === "student123" && password === "1234") {
-      localStorage.setItem("token", "fakeStudent123");
-      navigate("/homepage");
-    } else {
-      setError("Invalid credentials ❌");
-    }
+      if (username === "student123" && password === "1234") {
+        localStorage.setItem("token", "fakeStudent123");
+        navigate("/homepage");
+      } else {
+        setError("Invalid credentials ❌");
+      }
+      setLoading(false);
+    }, 1000);
   };
 
   return (
     <div
-      className={`flex items-center justify-center min-h-screen ${
+      className={`flex items-center justify-center min-h-screen px-4 ${
         darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
       }`}
     >
       <div
-        className={`w-full max-w-sm p-6 rounded-md ${
+        className={`w-full max-w-md p-8 rounded-xl shadow-lg ${
           darkMode ? "bg-gray-800" : "bg-white"
         }`}
       >
-        <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
+        {/* Logo / Title */}
+        <h1 className="text-3xl font-extrabold text-center text-blue-600 mb-2">
+          ProLMS
+        </h1>
+        <p className="text-center text-sm text-gray-500 mb-6">
+          Sign in to continue your learning journey 🚀
+        </p>
 
-        <div className="space-y-3">
+        {/* Form */}
+        <div className="space-y-4">
           <input
             type="text"
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className={`w-full p-2 border rounded ${
+            className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 transition ${
               darkMode
-                ? "bg-gray-700 border-gray-600 text-white"
-                : "bg-gray-50 border-gray-300"
+                ? "bg-gray-700 border-gray-600 text-white focus:ring-blue-400"
+                : "bg-gray-50 border-gray-300 focus:ring-blue-500"
             }`}
           />
           <input
@@ -55,23 +68,31 @@ function Login() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className={`w-full p-2 border rounded ${
+            className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 transition ${
               darkMode
-                ? "bg-gray-700 border-gray-600 text-white"
-                : "bg-gray-50 border-gray-300"
+                ? "bg-gray-700 border-gray-600 text-white focus:ring-blue-400"
+                : "bg-gray-50 border-gray-300 focus:ring-blue-500"
             }`}
           />
+
           <button
             onClick={handleLogin}
-            className="w-full p-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            disabled={loading}
+            className="w-full p-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition disabled:opacity-70 flex items-center justify-center"
           >
-            Login
+            {loading ? (
+              <span className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+            ) : (
+              "Login"
+            )}
           </button>
         </div>
 
+        {/* Error */}
         {error && <p className="text-red-500 text-sm mt-3">{error}</p>}
 
-        <p className="text-xs text-center mt-4">
+        {/* Demo Credentials */}
+        <p className="text-xs text-center mt-6 text-gray-500">
           Demo → Username: <b>student123</b>, Password: <b>1234</b>
         </p>
       </div>

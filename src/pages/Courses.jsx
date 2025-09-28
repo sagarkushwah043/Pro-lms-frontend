@@ -72,60 +72,87 @@ function Courses() {
   const getEnrollment = (courseId) => enrollments.find((e) => e.courseId === courseId);
 
   return (
-    <div className={`min-h-screen ${darkMode ? "bg-gray-900 text-gray-100" : "bg-white text-gray-900"}`}>
+    <div className={`min-h-screen ${darkMode ? "bg-gray-950 text-gray-100" : "bg-gray-50 text-gray-900"}`}>
       {/* Header */}
-      <div className={`p-4 border-b ${darkMode ? "border-gray-700" : "border-gray-300"}`}>
-        <p className="text-center text-sm mb-3">Explore Courses</p>
-        <div className="max-w-xl mx-auto">
+      <div className={`p-6 border-b ${darkMode ? "border-gray-800" : "border-gray-200"}`}>
+        <h1 className="text-center text-3xl font-bold mb-4">Explore Courses</h1>
+        <div className="max-w-2xl mx-auto">
           <FilterBar
             filters={filters}
             onFilterChange={(newFilters) => { setFilters(newFilters); setPage(1); }}
           />
         </div>
-        {error && <p className="text-center text-red-500 text-sm mt-2">{error}</p>}
+        {error && <p className="text-center text-red-500 text-sm mt-3">{error}</p>}
       </div>
 
-      {/* Courses */}
-      <div className="p-4">
+      {/* Courses Section */}
+      <div className="p-6">
         {loading ? (
-          <p className="text-center">Loading...</p>
+          <div className="flex justify-center items-center py-32">
+            <div
+              className={`w-14 h-14 border-4 border-t-transparent rounded-full animate-spin ${
+                darkMode ? "border-teal-400" : "border-indigo-600"
+              }`}
+            ></div>
+          </div>
         ) : courses.length > 0 ? (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {courses.map((course) => {
               const enrollment = getEnrollment(course.id);
               return (
-                <div key={course.id} className={`border p-3 rounded ${darkMode ? "border-gray-700" : "border-gray-300"}`}>
+                <div
+                  key={course.id}
+                  className={`rounded-xl overflow-hidden shadow-md hover:shadow-xl transition border ${
+                    darkMode ? "bg-gray-900 border-gray-700" : "bg-white border-gray-200"
+                  }`}
+                >
                   <img
                     src={course.image || "https://via.placeholder.com/400x200.png?text=Course+Image"}
                     alt={course.title}
-                    className="w-full h-32 object-cover mb-2 rounded"
+                    className="w-full h-40 object-cover"
                   />
-                  <h2 className="font-medium text-sm mb-1">{course.title}</h2>
-                  <p className="text-xs mb-2">{course.description?.slice(0, 60)}...</p>
-                  <p className="text-xs text-gray-500 mb-3">{course.category} • {course.level}</p>
-                  <div className="flex gap-2">
-                    <button onClick={() => navigate(`/courses/${course.id}`)} className="flex-1 px-2 py-1 text-xs border rounded">
-                      View
-                    </button>
-                    {enrollment ? (
-                      <button onClick={() => handleUnenroll(enrollment.id)} className="flex-1 px-2 py-1 text-xs border rounded">
-                        Unenroll
+                  <div className="p-4">
+                    <h2 className="font-semibold text-base mb-1 line-clamp-1">{course.title}</h2>
+                    <p className="text-sm mb-3 text-gray-600 dark:text-gray-400 line-clamp-2">
+                      {course.description?.slice(0, 80)}...
+                    </p>
+                    <p className="text-xs text-gray-500 mb-4">
+                      {course.category} • {course.level}
+                    </p>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => navigate(`/courses/${course.id}`)}
+                        className="flex-1 px-3 py-2 text-sm border rounded-md transition hover:bg-gray-100 dark:hover:bg-gray-800"
+                      >
+                        View
                       </button>
-                    ) : (
-                      <button onClick={() => handleEnroll(course.id)} className="flex-1 px-2 py-1 text-xs border rounded">
-                        Enroll
-                      </button>
-                    )}
+                      {enrollment ? (
+                        <button
+                          onClick={() => handleUnenroll(enrollment.id)}
+                          className="flex-1 px-3 py-2 text-sm rounded-md bg-red-500 text-white hover:bg-red-600 transition"
+                        >
+                          Unenroll
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleEnroll(course.id)}
+                          className="flex-1 px-3 py-2 text-sm rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition"
+                        >
+                          Enroll
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               );
             })}
           </div>
         ) : (
-          <p className="text-center mt-10">No courses found.</p>
+          <p className="text-center mt-10 text-gray-500">No courses found.</p>
         )}
 
-        <div className="mt-6 flex justify-center">
+        {/* Pagination */}
+        <div className="mt-10 flex justify-center">
           <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
       </div>
